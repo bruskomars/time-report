@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ <div class="container-fluid">
+     <div class="row">
+         <div class="col-4">
+            <h3 class="fw-bold">Time Report - {{ date }}</h3>
+         </div>
+
+        <div class="col-7"></div>
+
+         <div class="fs-5 col-1">
+           <a href="{% url 'status-report' request.user.id %}" class="">View Status</a>
+         </div>
+
+     </div>
+</div>
+
+<hr>
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-3 d-flex justify-content-center">
+            <a class="btn btn-outline-primary btn-sm" href="{% url 'create-record' %}">
+                Add new time report &nbsp; <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </a> &nbsp; &nbsp;
+
+            <a class="btn btn-outline-primary btn-sm" href="{% url 'create-status' %}">
+                Add new task status &nbsp; <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </a>
+        </div>
+
+
+
+
+        <div class="col-7"></div>
+
+        <div class="col-2">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input class="btn btn-outline-primary btn-sm" type="date" name="date" id="calendar"> &nbsp;
+                <button type="submit" class="btn btn-primary btn-sm  btn-block "> Filter by date</button>
+
+
+            </form>
+        </div>
+
+    </div>
+</div>
+<hr>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+    <tr class="text-center">
+        <th scope="col">Employee #</th>
+        <th scope="col">Name</th>
+        <th scope="col">Task</th>
+        <th scope="col">Area/Extent</th>
+        <th scope="col">Client</th>
+        <th scope="col">Date</th>
+        <th scope="col">Time Start</th>
+        <th scope="col">Time End</th>
+        <th scope="col">Total Time</th>
+        <th scope="col">Status</th>
+        <th scope="col">L/HD</th>
+
+        <th scope="col">View</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for record in records %}
+    <tr class="text-center">
+        <th scope="row">{{ record.user.employee_id }}</th>
+        <td>{{ record.user.last_name }}, &nbsp;{{ record.user.first_name }}</td>
+        <td>{{ record.task.name }}</td>
+        <td>{{ record.area_extent }}</td>
+        <td>{{ record.client.name }}</td>
+        <td>{{ record.date|date:"D, M d, Y" }}</td>
+        <td>{{ record.time_start|time:"h:i A" }}</td>
+        <td>{{ record.time_end }}</td>
+        <td>{{ record.total_time }}</td>
+        <td>{{ record.status }}</td>
+        <td>{{ record.l_hd }}</td>
+        <td><a class="btn btn-success btn-sm" href="{% url 'view-record' record.id %}"><i class="fa fa-eye"
+                                                                                          aria-hidden="true"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+{% endblock content %}
